@@ -46,6 +46,11 @@ class App extends React.Component {
 			dob: e.target.value
 		})
 	}
+	handleType = e => {
+		this.setState({
+			type: e.target.value
+		})
+	}
 	handleSubmit = e => {
 		console.log(this.state)
 	}
@@ -74,6 +79,7 @@ class App extends React.Component {
 						label='Confirm Password'
 						type='password'
 						margin='normal'
+						error={this.state.password != this.state.confirmPassword}
 						onChange={this.handleConfirmPassword}
 					/>
 					<TextField
@@ -93,13 +99,17 @@ class App extends React.Component {
 						}}
 						onChange={this.handleDate}
 					/>
-					<InputLabel htmlFor='age-customized-native-simple'>
-						License Type
-					</InputLabel>
-					<Select value={this.state.type}>
+					<TextField
+						id='type'
+						select
+						label='License Type'
+						value={this.state.type}
+						onChange={this.handleType}
+						margin='normal'
+					>
 						<MenuItem value='full'>Full</MenuItem>
 						<MenuItem value='prov'>Provisional</MenuItem>
-					</Select>
+					</TextField>
 					<br />
 					<Button
 						variant='contained'
