@@ -19,92 +19,72 @@ class App extends React.Component {
 			confirmPassword: '',
 			name: '',
 			dob: 0,
-			type: ''
+			type: '',
+			points: 0
 		}
 	}
 
-	handleUsername = e => {
+	handleChange = e => {
+		const { name, value } = e.target
 		this.setState({
-			username: e.target.value
+			[name]: value
 		})
 	}
-	handlePassword = e => {
-		this.setState({
-			password: e.target.value
-		})
-	}
-	handleConfirmPassword = e => {
-		this.setState({
-			confirmPassword: e.target.value
-		})
-	}
-	handleName = e => {
-		this.setState({
-			name: e.target.value
-		})
-	}
-	handleDate = e => {
-		this.setState({
-			dob: e.target.value
-		})
-	}
-	handleType = e => {
-		this.setState({
-			type: e.target.value
-		})
-	}
+
 	handleSubmit = e => {
-		const { username, password, name, dob, type } = this.state
+		const { username, password, name, dob, type, points } = this.state
 		const creds = {
 			username,
 			password,
 			name,
 			dob,
-			type
+			type,
+			points
 		}
 		console.log(creds)
 		axios({
 			method: 'POST',
-			url: 'http://localhost:8080',
+			url: 'http://localhost:8081',
 			data: creds
-		})
+		}).then(() => console.log('Credentials submitted.'))
 	}
 
 	render() {
 		return (
 			<div className='App'>
 				<h1>Clueless.</h1>
+				<h2>Issuer</h2>
 				<form className='myForm' noValidate autoComplete='off'>
 					<TextField
-						id='username'
+						name='username'
 						label='Username'
 						margin='normal'
 						value={this.state.username}
-						onChange={this.handleUsername}
+						onChange={this.handleChange}
 					/>
 					<TextField
-						id='password'
+						name='password'
 						label='Password'
 						type='password'
 						margin='normal'
-						onChange={this.handlePassword}
+						onChange={this.handleChange}
 					/>
 					<TextField
-						id='confirmPassword'
+						name='confirmPassword'
 						label='Confirm Password'
 						type='password'
 						margin='normal'
 						error={this.state.password != this.state.confirmPassword}
-						onChange={this.handleConfirmPassword}
+						onChange={this.handleChange}
 					/>
 					<TextField
-						id='name'
+						name='name'
 						label='Fullname'
 						margin='normal'
-						onChange={this.handleName}
+						onChange={this.handleChange}
 					/>
 					<TextField
-						id='date'
+						name='dob'
 						label='Date Of Birth'
 						defaultValue=''
 						type='date'
@@ -112,19 +92,28 @@ class App extends React.Component {
 						InputLabelProps={{
 							shrink: true
 						}}
-						onChange={this.handleDate}
+						onChange={this.handleChange}
 					/>
 					<TextField
-						id='type'
+						name='type'
 						select
 						label='License Type'
 						value={this.state.type}
-						onChange={this.handleType}
+						onChange={this.handleChange}
 						margin='normal'
 					>
 						<MenuItem value='full'>Full</MenuItem>
 						<MenuItem value='prov'>Provisional</MenuItem>
 					</TextField>
+					<TextField
+						name='points'
+						type='number'
+						label='Penalty points'
+						min='0'
+						value={this.state.points}
+						onChange={this.handleChange}
+						margin='normal'
+					></TextField>
 					<br />
 					<Button
 						variant='contained'
@@ -135,7 +124,10 @@ class App extends React.Component {
 								this.state.username &&
 								this.state.password &&
 								this.state.dob &&
-								this.state.password == this.state.confirmPassword
+								this.state.password === this.state.confirmPassword &&
+								this.state.type &&
+								this.state.points >= 0 &&
+								this.state.points <= 13
 							)
 						}
 						onClick={this.handleSubmit}

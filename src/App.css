@@ -5,6 +5,11 @@ body {
 h1 {
 	font-family: helvetica;
 	font-size: 100px;
+	margin-bottom: 4vh;
+}
+
+h2 {
+	font-family: helvetica;
 }
 
 .App {
