@@ -8,6 +8,8 @@ import { InputLabel } from '@material-ui/core'
 import { Button } from '@material-ui/core'
 import MenuItem from '@material-ui/core/MenuItem'
 
+import axios from 'axios'
+
 class App extends React.Component {
 	constructor() {
 		super()
@@ -52,7 +54,20 @@ class App extends React.Component {
 		})
 	}
 	handleSubmit = e => {
-		console.log(this.state)
+		const { username, password, name, dob, type } = this.state
+		const creds = {
+			username,
+			password,
+			name,
+			dob,
+			type
+		}
+		console.log(creds)
+		axios({
+			method: 'POST',
+			url: 'http://localhost:8080',
+			data: creds
+		})
 	}
 
 	render() {
